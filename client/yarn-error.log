@@ -1,0 +1,52 @@
+Arguments: 
+  /Users/nmy/.nvm/versions/node/v16.9.0/bin/node /Users/nmy/.nvm/versions/node/v16.9.0/bin/yarn add vuex@next vue-router@next axios elelment-plus
+
+PATH: 
+  /Users/nmy/.nvm/versions/node/v16.9.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin
+
+Yarn version: 
+  1.22.11
+
+Node version: 
+  16.9.0
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  Error: https://registry.npm.taobao.org/elelment-plus: Not found
+      at Request.params.callback [as _callback] (/Users/nmy/.nvm/versions/node/v16.9.0/lib/node_modules/yarn/lib/cli.js:66992:18)
+      at Request.self.callback (/Users/nmy/.nvm/versions/node/v16.9.0/lib/node_modules/yarn/lib/cli.js:140763:22)
+      at Request.emit (node:events:394:28)
+      at Request.<anonymous> (/Users/nmy/.nvm/versions/node/v16.9.0/lib/node_modules/yarn/lib/cli.js:141735:10)
+      at Request.emit (node:events:394:28)
+      at IncomingMessage.<anonymous> (/Users/nmy/.nvm/versions/node/v16.9.0/lib/node_modules/yarn/lib/cli.js:141657:12)
+      at Object.onceWrapper (node:events:513:28)
+      at IncomingMessage.emit (node:events:406:35)
+      at endReadableNT (node:internal/streams/readable:1343:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+npm manifest: 
+  {
+    "name": "yq-manager",
+    "version": "0.0.0",
+    "scripts": {
+      "dev": "vite",
+      "build": "vite build",
+      "serve": "vite preview"
+    },
+    "dependencies": {
+      "vue": "^3.2.16"
+    },
+    "devDependencies": {
+      "@vitejs/plugin-vue": "^1.9.3",
+  
+      "vite": "^2.6.4"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
