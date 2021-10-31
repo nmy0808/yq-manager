@@ -1,16 +1,17 @@
 <template>
-<router-view></router-view>
+  <router-view></router-view>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: '',
-  components: {}
-})
+  name: "app",
+  components: {},
+});
 </script>
-<style lang="scss" scoped>
-.box{color: red;}
+<style>
+@import "@/assets/scss/reset.scss";
+@import "@/assets/scss/base.scss";
+@import "@/assets/scss/comm.scss";
 </style>
-
