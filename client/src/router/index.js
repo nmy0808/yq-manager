@@ -19,13 +19,13 @@ const routes = [
         meta: { title: "欢迎页" },
         component: Welcome,
       },
-      {
-        name: "login",
-        path: "/login",
-        meta: { title: "登录页" },
-        component: Login,
-      },
     ],
+  },
+  {
+    name: "login",
+    path: "/login",
+    meta: { title: "登录页" },
+    component: Login,
   },
 ];
 
