@@ -1,7 +1,6 @@
 <template>
   <div class="Welcome-page">
-    <div>Welcome1</div>
-    <el-button @click="toPageLogin">去登录</el-button>
+    <div>欢迎页</div>
   </div>
 </template>
 

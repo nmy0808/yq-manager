@@ -1,9 +1,21 @@
 <template>
-  <div class="manager-wrap">
-    <div class="manager-left">123</div>
+  <div class="manager-wrap" :class="[wrapClass]">
+    <div class="manager-left">
+      <c-menu :menus="menus" ref="menuRef"></c-menu>
+    </div>
     <div class="manager-right">
       <div class="manager-top-nav">
-        <div class="manager-bread">首页>登录</div>
+        <div class="manager-bread">
+          <c-bread-crumbs>
+            <template #left>
+              <i
+                @click="toggleMenu"
+                class="menu-icon-fold"
+                :class="[menuIconClass]"
+              ></i>
+            </template>
+          </c-bread-crumbs>
+        </div>
         <div class="manager-user">user</div>
       </div>
       <div class="manager-main">
@@ -17,10 +29,35 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-
+import CMenu from "../components/menu/c-menu.vue";
+import { menuListApi } from "../api";
+import CBreadCrumbs from "../components/bread-crumbs/c-bread-crumbs.vue";
 export default defineComponent({
   name: "HOME",
-  components: {},
+  components: { CMenu, CBreadCrumbs },
+  data() {
+    return {
+      menus: [],
+      wrapClass: "",
+      menuIconClass: " el-icon-s-fold",
+    };
+  },
+  async mounted() {
+    const menus = await menuListApi();
+    this.menus = menus;
+  },
+  methods: {
+    toggleMenu() {
+      const flag = this.$refs.menuRef.toggleCollapse();
+      if (flag) {
+        this.wrapClass = "fold";
+        this.menuIconClass = "el-icon-s-unfold";
+      } else {
+        this.wrapClass = "";
+        this.menuIconClass = "el-icon-s-fold";
+      }
+    },
+  },
 });
 </script>
 <style>
@@ -35,12 +72,13 @@ export default defineComponent({
   font-size: $font-size-small;
   position: relative;
   // 导航栏收缩样式
-  &.has-shrink{ 
-    .manager-left{
-      width: 80px;
+  &.fold {
+    .manager-left {
+      width: 70px;
+      overflow-x: hidden;
     }
-    .manager-right{
-      margin-left: 80px;
+    .manager-right {
+      margin-left: 70px;
     }
   }
   .manager-left {
@@ -69,6 +107,9 @@ export default defineComponent({
       box-sizing: border-box;
       justify-content: space-between;
       align-items: center;
+      .menu-icon-fold {
+        font-size: 20px;
+      }
       .manager-bread {
       }
       .manager-user {
