@@ -8,7 +8,7 @@
     active-text-color="#409eff"
     router
   >
-    <div class="menu-logo">
+    <div class="menu-logo" :class="[calcLogoClass ? 'fold' : '']">
       <div class="menu-logo-img"></div>
       <div class="menu-logo-title">manager</div>
     </div>
@@ -36,10 +36,15 @@ export default defineComponent({
       isCollapse: false,
     };
   },
+  computed: {
+    calcLogoClass() {
+      return this.isCollapse;
+    },
+  },
   methods: {
     toggleCollapse() {
       this.isCollapse = !this.isCollapse;
-      return this.isCollapse
+      return this.isCollapse;
     },
   },
 });
@@ -50,17 +55,24 @@ export default defineComponent({
   overflow-y: auto;
   border: none;
   transition: all 200ms;
-  .menu-logo{
+  .menu-logo {
     height: 50px;
     display: flex;
     align-items: center;
-    .menu-logo-img{
-      width: 50px;
-      height: 50px;
-      background: url('../../assets/logo.png') no-repeat center/30px;
+    justify-content: center;
+    &.fold {
+      .menu-logo-title {
+        display: none;
+      }
     }
-    .menu-logo-title{
+    .menu-logo-img {
+      width: 40px;
+      height: 40px;
+      background: url("../../assets/logo.png") no-repeat center/cover;
+    }
+    .menu-logo-title {
       font-size: 20px;
+      margin-left: 10px;
       color: white;
     }
   }

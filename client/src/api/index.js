@@ -7,3 +7,7 @@ export const loginApi = (data) => {
 export const menuListApi = (data={}) => {
   return request.get("/menu/list", data);
 };
+
+export const leaveCountApi = (data={}) => {
+  return request.get("/leave/count", data);
+};

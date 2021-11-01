@@ -16,7 +16,12 @@
             </template>
           </c-bread-crumbs>
         </div>
-        <div class="manager-user">user</div>
+        <div class="manager-user">
+          <el-badge :is-dot="leaveCount>0" class="manager-user-badge">
+            <i class="el-icon-bell"></i>
+          </el-badge>
+          <c-user-dropdown :userInfo="userInfo"></c-user-dropdown>
+        </div>
       </div>
       <div class="manager-main">
         <div class="manager-main-box">
@@ -30,21 +35,26 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import CMenu from "../components/menu/c-menu.vue";
-import { menuListApi } from "../api";
+import { menuListApi, leaveCountApi } from "../api";
 import CBreadCrumbs from "../components/bread-crumbs/c-bread-crumbs.vue";
+import CUserDropdown from "../components/dropdown/c-user-dropdown.vue";
 export default defineComponent({
   name: "HOME",
-  components: { CMenu, CBreadCrumbs },
+  components: { CMenu, CBreadCrumbs, CUserDropdown },
   data() {
     return {
       menus: [],
       wrapClass: "",
       menuIconClass: " el-icon-s-fold",
+      userInfo: this.$store.state.userInfo || {},
+      leaveCount:0,
     };
   },
   async mounted() {
     const menus = await menuListApi();
     this.menus = menus;
+    const leaveCount = await leaveCountApi();
+    this.leaveCount = leaveCount;
   },
   methods: {
     toggleMenu() {
@@ -93,6 +103,7 @@ export default defineComponent({
     transition: all 200ms;
   }
   .manager-right {
+    min-width: 1300px;
     margin-left: 200px;
     height: 100%;
     position: relative;
@@ -113,6 +124,15 @@ export default defineComponent({
       .manager-bread {
       }
       .manager-user {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        .manager-user-badge {
+          line-height: 1;
+        }
+        .el-icon-bell {
+          font-size: 20px;
+        }
       }
     }
     .manager-main {
