@@ -1,40 +1,24 @@
-var app = require('koa')()
-  , logger = require('koa-logger')
-  , json = require('koa-json')
-  , views = require('koa-views')
-  , onerror = require('koa-onerror');
+const Koa = require("koa");
+const bodyparser = require("koa-bodyparser");
+const { fail } = require("./utils/util");
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+const app = new Koa();
+app.use(bodyparser());
 
-// error handler
-onerror(app);
-
-// global middlewares
-app.use(views('views', {
-  root: __dirname + '/views',
-  default: 'jade'
-}));
-app.use(require('koa-bodyparser')());
-app.use(json());
-app.use(logger());
-
-app.use(function *(next){
-  var start = new Date;
-  yield next;
-  var ms = new Date - start;
-  console.log('%s %s - %s', this.method, this.url, ms);
+// 链接mongoDb
+require("./config/db");
+// 处理错误
+app.use(async (ctx, next) => {
+  try {
+    await next();
+  } catch (error) {
+    ctx.body = fail("服务器错误啦!!");
+  }
 });
+// 注册路由
+require("./router")(app);
 
-app.use(require('koa-static')(__dirname + '/public'));
-
-// routes definition
-app.use(index.routes(), index.allowedMethods());
-app.use(users.routes(), users.allowedMethods());
-
-// error-handling
-app.on('error', (err, ctx) => {
-  console.error('server error', err, ctx)
+// listen 3000
+app.listen(3000, () => {
+  console.log("listen 3000");
 });
-
-module.exports = app;

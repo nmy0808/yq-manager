@@ -30,8 +30,9 @@ service.interceptors.response.use((res) => {
     }, 1500);
     return Promise.reject(TOKEN_INVALID);
   } else {
-    ElMessage.error({ message: NETWORK_ERROR });
-    return Promise.reject(msg || NETWORK_ERROR);
+    const message = msg || NETWORK_ERROR;
+    ElMessage.error({ message });
+    return Promise.reject(message);
   }
 });
 // 核心

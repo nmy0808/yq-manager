@@ -5,22 +5,29 @@ import vue from "@vitejs/plugin-vue";
 export default defineConfig({
   server: {
     port: 8080,
+    proxy: {
+      "/api": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+        secure: true,
+      },
+    },
   },
   resolve: {
-    extensions:['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
+    extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
     alias: {
-      '@': '/src'
-    }
+      "@": "/src",
+    },
   },
-  css:{
-      preprocessorOptions: {
-        scss: {
-          additionalData: `
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `
           @import '@/assets/scss/mixin.scss';
           @import '@/assets/scss/comm.scss';
-          @import '@/assets/scss/variable.scss';`
-        }
-      }
+          @import '@/assets/scss/variable.scss';`,
+      },
+    },
   },
   plugins: [vue()],
 });

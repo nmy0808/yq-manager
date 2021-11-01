@@ -70,7 +70,7 @@ export default defineComponent({
     const userFromCommit = () => {
       userFormRef.value.validate(async (valid) => {
         if (valid) {
-          const loginInfo = await loginApi();
+          const loginInfo = await loginApi(userForm);
           store.commit("setUserInfo", loginInfo);
           toPageHome();
         } else {
