@@ -1,42 +1,89 @@
 
 <template>
   <div class="login-page">
-    <el-form class="login-form">
+    <el-form
+      class="login-form"
+      ref="userFormRef"
+      :model="userForm"
+      :rules="userRules"
+      status-icon
+    >
       <div class="login-title">后台系统</div>
-      <el-form-item>
+      <el-form-item prop="userName">
         <el-input
+          v-model="userForm.userName"
           type="text"
           placeholder="请输入账号"
           prefix-icon="el-icon-user"
         ></el-input>
       </el-form-item>
-      <el-form-item>
+      <el-form-item prop="userPwd">
         <el-input
+          v-model="userForm.userPwd"
           type="text"
           placeholder="请输入密码"
           prefix-icon="el-icon-lock"
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="login-submit">提交</el-button>
+        <el-button @click="userFromCommit" type="primary" class="login-submit"
+          >登录</el-button
+        >
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import { useRouter } from "vue-router";
+import { defineComponent, reactive, ref } from "vue";
+import useVuexWithRouter from "@/hooks/useVuexWithRouter";
+import { loginApi } from "@/api";
 export default defineComponent({
   name: "Login",
   components: {},
   setup() {
-    const router = useRouter();
+    const { router, store } = useVuexWithRouter();
     const toPageHome = () => {
       router.push("/");
     };
+    const userFormRef = ref(null);
+    const userForm = reactive({
+      userName: "",
+      userPwd: "",
+    });
+    const userRules = {
+      userName: [
+        {
+          required: true,
+          message: "必须填写用户名",
+          trigger: "blur",
+        },
+      ],
+      userPwd: [
+        {
+          required: true,
+          message: "必须填写密码",
+          trigger: "blur",
+        },
+      ],
+    };
+    const userFromCommit = () => {
+      userFormRef.value.validate(async (valid) => {
+        if (valid) {
+          const loginInfo = await loginApi();
+          store.commit("setUserInfo", loginInfo);
+          toPageHome();
+        } else {
+          return false;
+        }
+      });
+    };
     return {
       toPageHome,
+      userFormRef,
+      userForm,
+      userRules,
+      userFromCommit,
     };
   },
 });
@@ -59,7 +106,7 @@ export default defineComponent({
       font-size: $font-size-large;
       text-align: center;
     }
-    .login-submit{
+    .login-submit {
       width: 100%;
     }
   }
