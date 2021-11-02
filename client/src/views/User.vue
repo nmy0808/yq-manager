@@ -22,7 +22,7 @@
       </el-form>
     </div>
     <div>
-      <el-button type="primary">新增</el-button>
+      <el-button type="primary" @click="addDialog = true">新增</el-button>
       <el-button type="danger" @click="onDeleteUserSelects">批量删除</el-button>
       <el-table
         @selection-change="onChangeUserSelects"
@@ -79,6 +79,81 @@
         </span>
       </template>
     </el-dialog>
+    <!-- 新增弹窗 -->
+    <el-dialog v-model="addDialog" title="操作" width="30%">
+      <el-form
+        ref="addFromRef"
+        :model="addUserFrom"
+        label-width="90px"
+        :rules="addUserFromRules"
+      >
+        <el-form-item label="用户名" prop="userName">
+          <el-input
+            placeholder="请输入用户名"
+            v-model="addUserFrom.userName"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="userEmail">
+          <el-input
+            placeholder="请输入用户邮箱"
+            v-model="addUserFrom.userEmail"
+          >
+            <template #append>@yq.com</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="手机号" prop="mobile">
+          <el-input
+            placeholder="请输入手机号"
+            v-model="addUserFrom.mobile"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="岗位" prop="job">
+          <el-input
+            placeholder="请输入用户岗位"
+            v-model="addUserFrom.job"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="状态" prop="state">
+          <el-select v-model="addUserFrom.state" model-value="3">
+            <el-option label="在职" value="1"></el-option>
+            <el-option label="离职" value="2"></el-option>
+            <el-option label="试用期" value="3"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="系统角色" prop="roleList">
+          <el-select
+            v-model="addUserFrom.roleList"
+            multiple
+            class="w-100"
+            placeholder="请选择部门角色"
+          >
+            <el-option
+              v-for="role in roleList"
+              :label="role.roleName"
+              :value="role._id"
+              :key="role._id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="所属部门" prop="deptId">
+          <el-cascader
+            v-model="addUserFrom.deptId"
+            placeholder="请选择所属部门"
+            :options="deptList"
+            :props="{ checkStrictly: true, label: 'deptName', value: '_id' }"
+            clearable
+            show-all-levels
+            class="w-100"
+          />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="addDialog = false">取消</el-button>
+          <el-button type="primary" @click="onSummit">确定</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -89,15 +164,23 @@ import {
   reactive,
   ref,
   getCurrentInstance,
+  toRaw,
 } from "vue";
-import { userListApi, deleteUserApi } from "../api";
+import {
+  userListApi,
+  deleteUserApi,
+  roleListApi,
+  deptListApi,
+  addUserApi,
+  editUserApi,
+} from "../api";
 
 export default defineComponent({
   name: "User",
   components: {},
   setup() {
     const { proxy } = getCurrentInstance();
-
+    // 属性
     const userFrom = reactive({
       userId: "",
       userName: "",
@@ -131,12 +214,29 @@ export default defineComponent({
     ];
     const userList = ref([]);
     const userSelects = ref([]);
-    // 多选时存入选中列表中
-    const onChangeUserSelects = (list) => {
-      userSelects.value = list.map((user) => user.userId);
-    };
+    const addDialog = ref(false);
     const deleteDialog = ref(false);
-    //
+    const addUserFrom = reactive({});
+    const roleList = ref([]);
+    const deptList = ref([]);
+    const addUserFromRules = {
+      userName: {
+        required: true,
+        message: "必须填写用户名",
+        trigger: "blur",
+      },
+      userEmail: {
+        required: true,
+        message: "必须填写邮箱",
+        trigger: "blur",
+      },
+      mobile: {
+        pattern: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+        message: "手机号格式错误",
+        trigger: "blur",
+      },
+    };
+    // api
     const getUserList = async () => {
       const params = { ...userFrom, ...pager };
       const { list, page } = await userListApi(params);
@@ -150,6 +250,29 @@ export default defineComponent({
       } else {
         proxy.$message.error("请选择删除项");
       }
+    };
+    const getRoleList = async () => {
+      roleList.value = await roleListApi();
+    };
+    const getDeptList = async () => {
+      deptList.value = await deptListApi();
+    };
+    const addUser = async () => {
+      const userFormRaw = toRaw(addUserFrom);
+      userFormRaw.userEmail += "@yq.com";
+      return addUserApi(userFormRaw);
+    };
+    const editUser = async () => {
+      return editUserApi();
+    };
+    // 通用方法
+    const resetFields = (refName) => {
+      proxy.$refs[refName].resetFields();
+    };
+    // 事件方法
+    // 多选时存入选中列表中
+    const onChangeUserSelects = (list) => {
+      userSelects.value = list.map((user) => user.userId);
     };
     const onChangeCurrentPage = (currentPage) => {
       pager.pageNum = currentPage;
@@ -181,15 +304,40 @@ export default defineComponent({
       } catch (error) {}
       deleteDialog.value = false;
     };
+    const onSummit = () => {
+      proxy.$refs.addFromRef.validate(async (valid) => {
+        if (valid) {
+          try {
+            const res = await addUser();
+            if (res) {
+              proxy.$message.success("用户添加成功");
+            } else {
+              proxy.$message.error("用户添加失败");
+            }
+            resetFields("addFromRef");
+          } catch (error) {}
+          addDialog.value = false;
+        }
+      });
+    };
+    // 生命周期
     onMounted(() => {
       getUserList();
+      getRoleList();
+      getDeptList();
     });
+    //
     return {
       userFrom,
       userColumns,
       userList,
       onChangeUserSelects,
       pager,
+      addUserFrom,
+      addUserFromRules,
+      roleList,
+      deptList,
+      addDialog,
       deleteDialog,
       onChangeCurrentPage,
       onSearchUserFrom,
@@ -197,6 +345,7 @@ export default defineComponent({
       onEditUserList,
       onAddDeleteList,
       onDeleteUserSelects,
+      onSummit,
     };
   },
 });
