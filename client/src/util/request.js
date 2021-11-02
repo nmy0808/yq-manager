@@ -44,7 +44,7 @@ function request(options) {
   // get   => params
   // other => data
   options.method = options.method || "get";
-  if (options.method.trim().toLowerCase === "get") {
+  if (options.method.trim().toLowerCase() === "get") {
     options.params = options.data;
   }
   //

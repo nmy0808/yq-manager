@@ -11,3 +11,7 @@ export const menuListApi = (data={}) => {
 export const leaveCountApi = (data={}) => {
   return request.get("/leave/count", data);
 };
+
+export const userListApi = (data={}) => {
+  return request.get("/users/list", data);
+};
