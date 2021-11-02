@@ -1,4 +1,6 @@
 const user = require("../models/user.schema");
+const jwt = require("jsonwebtoken");
+const { jwtSecret } = require("../config/index");
 const { success, fail } = require("../utils/util");
 
 const Router = require("@koa/router");
@@ -16,7 +18,9 @@ router.post("/login", async (ctx) => {
     { userPwd: 0 }
   );
   if (result) {
-    ctx.body = success(result);
+    const doc = result._doc;
+    const token = jwt.sign({ data: doc }, jwtSecret, { expiresIn: "1h" });
+    ctx.body = success({ token, ...doc });
   } else {
     ctx.body = fail("请检查用户名或密码");
   }

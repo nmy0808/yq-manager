@@ -1,6 +1,6 @@
 const Koa = require("koa");
 const bodyparser = require("koa-bodyparser");
-const { fail } = require("./utils/util");
+const { fail, CODE } = require("./utils/util");
 
 const app = new Koa();
 app.use(bodyparser());
@@ -12,7 +12,11 @@ app.use(async (ctx, next) => {
   try {
     await next();
   } catch (error) {
-    ctx.body = fail("服务器错误啦!!");
+    if (error.status === 401) {
+      ctx.body = fail("token验证错误", CODE.AUTH_ERROR);
+    } else {
+      ctx.body = fail("服务器错误啦!!");
+    }
   }
 });
 // 注册路由

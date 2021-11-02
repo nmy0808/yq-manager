@@ -1,6 +1,7 @@
 import axios from "axios";
 import config from "../config";
 import router from "../router";
+import storage from "../util/storage";
 import { ElMessage } from "element-plus";
 
 const TOKEN_INVALID = "Token认证失败，请重新登录";
@@ -16,7 +17,10 @@ const service = axios.create({
 // 请求拦截
 service.interceptors.request.use((req) => {
   const headers = req.headers;
-  if (!headers.Authorization) headers.Authorization = "Bearer 191919";
+  const userInfo = storage.getItem("userInfo");
+  if (!headers.Authorization) {
+    headers.Authorization = "Bearer " + userInfo.token;
+  }
   return req;
 });
 service.interceptors.response.use((res) => {

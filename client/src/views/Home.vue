@@ -51,10 +51,10 @@ export default defineComponent({
     };
   },
   async mounted() {
-    const menus = await menuListApi();
-    this.menus = menus;
     const leaveCount = await leaveCountApi();
     this.leaveCount = leaveCount;
+    const menus = await menuListApi();
+    this.menus = menus;
   },
   methods: {
     toggleMenu() {
