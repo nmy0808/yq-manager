@@ -15,16 +15,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, reactive, watchEffect, ref } from "vue";
+import { useRoute } from "vue-router";
 export default defineComponent({
   name: "CBreadCrumbs",
-  data() {
-    return {
-      matched: [],
-    };
-  },
-  mounted() {
-    this.matched = this.$route.matched;
+  setup() {
+    const route = useRoute();
+    const matched = ref([]);
+    watchEffect(() => {
+      matched.value = route.matched;
+    });
+    return { matched };
   },
 });
 </script>

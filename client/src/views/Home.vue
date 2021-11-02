@@ -77,15 +77,20 @@ export default defineComponent({
 </style>
 <style lang="scss" scoped>
 .manager-wrap {
-  width: 100vw;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
   height: 100vh;
+  width: 100%;
   font-size: $font-size-small;
-  position: relative;
   // 导航栏收缩样式
   &.fold {
     .manager-left {
       width: 70px;
       overflow-x: hidden;
+      height: 100%;
     }
     .manager-right {
       margin-left: 70px;
@@ -101,14 +106,21 @@ export default defineComponent({
     background: $color-main;
     color: $color-light;
     transition: all 200ms;
+  overflow-y: auto;
   }
   .manager-right {
     min-width: 1300px;
     margin-left: 200px;
     height: 100%;
-    position: relative;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     color: $color-dark;
     transition: all 200ms;
+  overflow-y: auto;
+
     .manager-top-nav {
       height: 50px;
       background: white;
@@ -118,6 +130,11 @@ export default defineComponent({
       box-sizing: border-box;
       justify-content: space-between;
       align-items: center;
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 2;
       .menu-icon-fold {
         font-size: 20px;
       }
@@ -136,16 +153,10 @@ export default defineComponent({
       }
     }
     .manager-main {
-      position: absolute;
-      top: 50px;
-      left: 0;
-      bottom: 0;
       width: 100%;
       padding: 30px;
       box-sizing: border-box;
-      background: #e9ebf0;
       .manager-main-box {
-        background: white;
         height: 100%;
         box-shadow: $shadow-light;
       }

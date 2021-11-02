@@ -51,7 +51,7 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .menu-wrap {
-  height: 100vh;
+  height: 100%;
   overflow-y: auto;
   border: none;
   transition: all 200ms;

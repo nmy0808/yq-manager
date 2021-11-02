@@ -30,7 +30,7 @@ const routes = [
   },
   {
     name: "login",
-    path: "/",
+    path: "/login",
     meta: { title: "登录页" },
     component: Login,
   },

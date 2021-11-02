@@ -1,4 +1,4 @@
-@import 'mixin.scss';
+@import "mixin.scss";
 
 .center-h {
   @include center-translate(h);
@@ -28,7 +28,7 @@
 }
 
 .global-bg {
-  background: linear-gradient(180deg, #37474F 0%, #232F3C 100%);
+  background: linear-gradient(180deg, #37474f 0%, #232f3c 100%);
 }
 
 .slide-enter-active {
@@ -46,7 +46,7 @@
     animation-play-state: paused;
   }
 }
-.g-relative{
+.g-relative {
   position: relative;
 }
 @keyframes slide {
@@ -67,61 +67,66 @@
   }
 }
 
-// 
-*:not([class^='el-']) {
+//
+*:not([class^="el-"]) {
   box-sizing: border-box;
 }
-.white{
+.white {
   background-color: #ffffff;
 }
-a{
+a {
   text-decoration: none;
 }
-.gray{
+.gray {
   background-color: #eef0f3;
 }
-.mr10{
+.mr10 {
   margin-right: 10px;
 }
-.mr20{
+.mr20 {
   margin-right: 20px;
 }
-.mb20{
+.mb20 {
   margin-bottom: 20px;
 }
-.m-lr10{
+.m-lr10 {
   margin-left: 10px;
   margin-right: 10px;
 }
-.p20{
+.p20 {
   padding: 20px;
 }
-.pl20{
+.pl20 {
   padding-left: 20px;
 }
-.text-right{
+.text-right {
   text-align: right;
 }
-.fr{
+.fr {
   float: right;
 }
-.flex{
+.flex {
   display: flex;
 }
-.flex-between{
+.flex-between {
   display: flex;
   justify-content: space-between;
 }
-.flex-center{
+.flex-center {
   display: flex;
   justify-content: center;
 }
-.tips{
+.tips {
   margin-left: 15px;
   color: #787878;
 }
-
-
+.radius {
+  border-radius: 5px;
+}
+.radius-hide {
+  border-radius: 5px;
+  overflow: hidden;
+}
 /*
 * 公共样式
 */

@@ -29,8 +29,9 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .welcome-page {
+  background: white;
   position: relative;
-  height: 100%;
+  height: 100vh;
   .welcome-img{
     @extend .center-v;
     right: 20%;
