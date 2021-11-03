@@ -10,6 +10,7 @@
         </el-form-item>
         <el-form-item label="用户状态" prop="state">
           <el-select :model-value="1" v-model="userFrom.state">
+            <el-option label="所有" :value="0" />
             <el-option label="在职" :value="1" />
             <el-option label="离职" :value="2" />
             <el-option label="试用期" :value="3" />
@@ -22,7 +23,7 @@
       </el-form>
     </div>
     <div>
-      <el-button type="primary" @click="addDialog = true">新增</el-button>
+      <el-button type="primary" @click="onAddUserBtn">新增</el-button>
       <el-button type="danger" @click="onDeleteUserSelects">批量删除</el-button>
       <el-table
         @selection-change="onChangeUserSelects"
@@ -38,14 +39,12 @@
           :key="column.prop"
           :prop="column.prop"
           :label="column.label"
+          :width="column.width"
           :formatter="column.formatter"
         />
         <el-table-column label="Operations">
           <template #default="scope">
-            <el-button
-              size="mini"
-              type="text"
-              @click="onEditUser(scope.row)"
+            <el-button size="mini" type="text" @click="onEditUser(scope.row)"
               >编辑</el-button
             >
             <el-button
@@ -116,7 +115,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="状态" prop="state">
-          <el-select v-model="addUserFrom.state" >
+          <el-select v-model="addUserFrom.state">
             <el-option label="在职" :value="1"></el-option>
             <el-option label="离职" :value="2"></el-option>
             <el-option label="试用期" :value="3"></el-option>
@@ -177,7 +176,7 @@ import {
   addUserApi,
   editUserApi,
 } from "../api";
-
+import util from "../util/utils";
 export default defineComponent({
   name: "User",
   components: {},
@@ -187,7 +186,7 @@ export default defineComponent({
     const userFrom = reactive({
       userId: "",
       userName: "",
-      state: 3,
+      state: 1,
     });
     const pager = reactive({
       pageNum: 1,
@@ -212,15 +211,29 @@ export default defineComponent({
           return { 0: "所有", 1: "在职", 2: "离职", 3: "试用" }[cellValue];
         },
       },
-      { prop: "createTime", label: "注册时间" },
-      { prop: "lastLoginTime", label: "最后登录" },
+      {
+        prop: "createTime",
+        label: "注册时间",
+        width: 220,
+        formatter(row, column, cellValue) {
+          return util.formateDate(new Date(cellValue));
+        },
+      },
+      {
+        prop: "lastLoginTime",
+        label: "最后登录",
+        width: 220,
+        formatter(row, column, cellValue) {
+          return util.formateDate(new Date(cellValue));
+        },
+      },
     ];
-    const isEdit = ref(false)
+    const isEdit = ref(false);
     const userList = ref([]);
     const userSelects = ref([]);
     const addDialog = ref(false);
     const deleteDialog = ref(false);
-    const addUserFrom = reactive({state:3});
+    const addUserFrom = reactive({ state: 3 });
     const roleList = ref([]);
     const deptList = ref([]);
     const addUserFromRules = {
@@ -250,7 +263,7 @@ export default defineComponent({
     };
     const deleteUser = async () => {
       if (userSelects.value.length > 0) {
-        return deleteUserApi({ nModified: userSelects.value });
+        return deleteUserApi({ userIds: userSelects.value });
       } else {
         proxy.$message.error("请选择删除项");
       }
@@ -267,7 +280,8 @@ export default defineComponent({
       return addUserApi(userFormRaw);
     };
     const editUser = async () => {
-      return editUserApi();
+      const userFormRaw = toRaw(addUserFrom);
+      return editUserApi(userFormRaw);
     };
     // 通用方法
     const resetFields = (refName) => {
@@ -290,10 +304,14 @@ export default defineComponent({
     };
     const onEditUser = async (user) => {
       addDialog.value = true;
-      isEdit.value = true
+      isEdit.value = true;
       await nextTick(() => {
         Object.assign(addUserFrom, user);
       });
+    };
+    const onAddUserBtn = () => {
+      isEdit.value = false;
+      addDialog.value = true;
     };
     const onAddDeleteList = (user) => {
       userSelects.value = [user.userId];
@@ -313,7 +331,7 @@ export default defineComponent({
       deleteDialog.value = false;
     };
     const onCancel = () => {
-      isEdit.value = false
+      isEdit.value = false;
       resetFields("addFromRef");
       // addUserFrom.state = 3;
       addDialog.value = false;
@@ -322,7 +340,12 @@ export default defineComponent({
       proxy.$refs.addFromRef.validate(async (valid) => {
         if (valid) {
           try {
-            const res = await addUser();
+            let res;
+            if (isEdit.value) {
+              res = await editUser();
+            } else {
+              res = await addUser();
+            }
             if (res) {
               proxy.$message.success("用户添加成功");
             } else {
@@ -330,6 +353,7 @@ export default defineComponent({
             }
             resetFields("addFromRef");
           } catch (error) {}
+          getUserList();
           addDialog.value = false;
         }
       });
@@ -358,6 +382,7 @@ export default defineComponent({
       onSearchUserFrom,
       onResetUserFrom,
       onEditUser,
+      onAddUserBtn,
       onAddDeleteList,
       onDeleteUserSelects,
       onSummit,

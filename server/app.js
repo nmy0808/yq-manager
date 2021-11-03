@@ -15,6 +15,7 @@ app.use(async (ctx, next) => {
     if (error.status === 401) {
       ctx.body = fail("token验证错误", CODE.AUTH_ERROR);
     } else {
+      console.log(error);
       ctx.body = fail("服务器错误啦!!");
     }
   }

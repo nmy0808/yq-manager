@@ -13,6 +13,7 @@ router.use(leaveRouter.routes());
 //
 module.exports = (app) => {
   // jwt拦截及过滤
+// app.use(jwt({ secret: jwtSecret }).unless({ path: [/.*/] }));;
   app.use(jwt({ secret: jwtSecret }).unless({ path: [/^\/api\/users\/login/] }));
   // 注册路由
   app.use(router.routes());

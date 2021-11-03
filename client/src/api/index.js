@@ -13,11 +13,11 @@ export const leaveCountApi = (data = {}) => {
 };
 
 export const userListApi = (data = {}) => {
-  return request.get("/users/list", data);
+  return request.get("/users/list", data, { mock: false });
 };
 // 删除单个或多个 `userIds:[userId,userId...]`
 export const deleteUserApi = (data = {}) => {
-  return request.post("/users/delete", data);
+  return request.post("/users/delete", data, { mock: false });
 };
 
 export const roleListApi = (data = {}) => {
@@ -31,9 +31,9 @@ export const deptListApi = (data = {}) => {
 export const addUserApi = (data = {}) => {
   console.log(data,'??');
   data.action = "add";
-  return request.post("/users/operate", data);
+  return request.post("/users/operate", data, { mock: false });
 };
 export const editUserApi = (data = {}) => {
   data.action = "edit";
-  return request.post("/users/operate", data);
+  return request.post("/users/operate", data, { mock: false });
 };
