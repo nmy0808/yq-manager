@@ -171,7 +171,7 @@ import {
 import {
   userListApi,
   deleteUserApi,
-  roleListApi,
+  rolesAllListApi,
   deptListApi,
   addUserApi,
   editUserApi,
@@ -269,7 +269,7 @@ export default defineComponent({
       }
     };
     const getRoleList = async () => {
-      roleList.value = await roleListApi();
+      roleList.value = await rolesAllListApi();
     };
     const getDeptList = async () => {
       deptList.value = await deptListApi();

@@ -257,13 +257,11 @@ export default defineComponent({
         if (valid) {
           if (!this.isEdit) {
             await this.addMenu();
-            this.onToggleDialog(false);
-            await this.getMenuList();
           } else {
             await this.editMenu();
-            this.onToggleDialog(false);
-            await this.getMenuList();
           }
+          this.onToggleDialog(false);
+          await this.getMenuList();
           this.$message.success("操作成功");
         }
       });

@@ -3,6 +3,7 @@ import Home from "@/views/Home";
 import Welcome from "@/views/Welcome";
 import User from "@/views/User";
 import Menu from "@/views/Menu";
+import Role from "@/views/Role";
 import Login from "@/views/Login";
 /**
  * @type {import('vue-router').RouteRecordRaw[]}
@@ -32,6 +33,12 @@ const routes = [
         path: "/system/menu",
         meta: { title: "菜单管理" },
         component: Menu,
+      },
+      {
+        name: "role",
+        path: "/system/role",
+        meta: { title: "角色管理" },
+        component: Role,
       },
     ],
   },

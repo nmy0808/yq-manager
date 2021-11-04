@@ -23,9 +23,21 @@ export const userListApi = (data = {}) => {
 export const deleteUserApi = (data = {}) => {
   return request.post("/users/delete", data, { mock: false });
 };
-
-export const roleListApi = (data = {}) => {
+// 获取角色名称列表
+export const rolesAllListApi = (data = {}) => {
   return request.get("/roles/allList", data);
+};
+// 获取角色列表
+export const roleListApi = (data = {}) => {
+  return request.get("/roles/list", data);
+};
+
+export const roleOperateApi = (data = {}) => {
+  return request.post("/roles/operate", data);
+};
+
+export const rolePermissionApi = (data = {}) => {
+  return request.post("/update/permission", data);
 };
 
 export const deptListApi = (data = {}) => {
