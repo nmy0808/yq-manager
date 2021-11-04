@@ -15,8 +15,10 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="">查询</el-button>
-          <el-button type="danger" @click="">重置</el-button>
+          <el-button type="primary" @click="onQueryMenu">查询</el-button>
+          <el-button type="danger" @click="resetForm('formRef')"
+            >重置</el-button
+          >
         </el-form-item>
       </el-form>
       <el-button type="primary" @click="onOpenMenuDialog(1)">创建</el-button>
@@ -42,15 +44,28 @@
               @click="onOpenMenuDialog(2, scope.row)"
               >新增</el-button
             >
-            <el-button type="text" size="small">编辑</el-button>
-            <el-button type="text" size="small">删除</el-button>
+            <el-button type="text" size="small" @click="onEmitMenu(scope.row)"
+              >编辑</el-button
+            >
+            <el-button type="text" size="small" @click="onDeleteMenu(scope.row)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
     </div>
     <!-- 新增/编辑弹窗 -->
-    <el-dialog v-model="isShowDialog" title="菜单操作" @close="resetForm('menuFormRef')">
-      <el-form :model="menuForm" ref="menuFormRef">
+    <el-dialog
+      v-model="isShowDialog"
+      title="菜单操作"
+      @close="resetForm('menuFormRef')"
+    >
+      <el-form
+        :model="menuForm"
+        ref="menuFormRef"
+        :rules="menuFromRoles"
+        label-width="100px"
+      >
         <el-form-item label="父级菜单" prop="parentId">
           <el-cascader
             v-model="menuForm.parentId"
@@ -72,33 +87,55 @@
             placeholder="请输入菜单名称"
           />
         </el-form-item>
-        <el-form-item label="菜单图标" prop="icon">
+        <el-form-item
+          label="菜单图标"
+          prop="icon"
+          v-show="menuForm.menuType === 1"
+        >
           <el-input
             type="text"
             v-model="menuForm.icon"
             placeholder="请输入菜单图标"
           />
         </el-form-item>
-        <el-form-item label="路由地址" prop="path">
+        <el-form-item
+          label="路由地址"
+          prop="path"
+          v-show="menuForm.menuType === 1"
+        >
           <el-input
             type="text"
             v-model="menuForm.path"
             placeholder="请输入路由地址"
           />
         </el-form-item>
-        <el-form-item label="组件路径" prop="component">
+        <el-form-item
+          label="组件路径"
+          prop="component"
+          v-show="menuForm.menuType === 1"
+        >
           <el-input
             type="text"
             v-model="menuForm.component"
             placeholder="请输入组件路径"
           />
         </el-form-item>
-        <el-form-item label="权限标识" prop="menuCode">
+        <el-form-item
+          label="权限标识"
+          prop="menuCode"
+          v-show="menuForm.menuType === 2"
+        >
           <el-input
             type="text"
             v-model="menuForm.menuCode"
             placeholder="请输入权限标识"
           />
+        </el-form-item>
+        <el-form-item label="菜单状态" prop="menuState">
+          <el-radio-group v-model="menuForm.menuState">
+            <el-radio :label="1">正常</el-radio>
+            <el-radio :label="2">停用</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -114,7 +151,6 @@
 <script lang="ts">
 import { defineComponent, nextTick } from "vue";
 import { menuListApi, menuOperateApi } from "../api";
-import util from "../util/utils";
 export default defineComponent({
   name: "Menu",
   components: {},
@@ -160,9 +196,21 @@ export default defineComponent({
           },
         },
       ],
-      menuForm: {},
+      menuForm: {
+        parentId: [null],
+        menuType: 1,
+        menuState: 1,
+      },
+      menuFromRoles: {
+        menuName: {
+          required: true,
+          message: "必须填写菜单名称",
+          trigger: "blur",
+        },
+      },
       isShowDialog: false,
-      action: 1, // 1:新增  2:子级新增
+      action: 1, // 1:新增  2:子级新增.
+      isEdit: false,
     };
   },
   methods: {
@@ -182,7 +230,7 @@ export default defineComponent({
     },
     deleteMenu(row) {
       const params = {};
-      params.id = row._id;
+      params._id = row._id;
       params.action = "delete";
       return menuOperateApi(params);
     },
@@ -190,6 +238,7 @@ export default defineComponent({
       this.isShowDialog = flag;
     },
     async onOpenMenuDialog(type, row) {
+      this.isEdit = false;
       // 1:新增  2:子级新增
       this.action = type;
       // 如果是子级新增
@@ -199,16 +248,38 @@ export default defineComponent({
           this.menuForm.parentId = parentId;
         });
       } else {
-        this.menuForm = {};
-       
+        // this.menuForm = {};
       }
       this.onToggleDialog(true);
     },
-    async onMenuSubmit() {
-      const res = await this.addMenu();
+    onMenuSubmit() {
+      this.$refs.menuFormRef.validate(async (valid) => {
+        if (valid) {
+          if (!this.isEdit) {
+            await this.addMenu();
+            this.onToggleDialog(false);
+            await this.getMenuList();
+          } else {
+            await this.editMenu();
+            this.onToggleDialog(false);
+            await this.getMenuList();
+          }
+          this.$message.success("操作成功");
+        }
+      });
+    },
+    onEmitMenu(menu) {
+      this.isEdit = true;
+      this.onToggleDialog(true);
+      this.menuForm = menu;
+    },
+    async onDeleteMenu(menu) {
+      await this.deleteMenu(menu);
+      this.$message.success("操作成功");
       await this.getMenuList();
-      this.onToggleDialog(false);
-      this.$message.success("添加成功");
+    },
+    async onQueryMenu() {
+      await this.getMenuList();
     },
     resetForm(formRefName) {
       this.$refs[formRefName].resetFields();
@@ -235,4 +306,3 @@ export default defineComponent({
   }
 }
 </style>
-

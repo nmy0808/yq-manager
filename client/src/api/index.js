@@ -5,11 +5,11 @@ export const loginApi = (data) => {
 };
 
 export const menuListApi = (data = {}) => {
-  return request.get("/menu/list", data);
+  return request.get("/menu/list", data, { mock: false });
 };
 
 export const menuOperateApi = (data = {}) => {
-  return request.post("/menu/operate", data);
+  return request.post("/menu/operate", data, { mock: false });
 };
 
 export const leaveCountApi = (data = {}) => {
@@ -33,7 +33,6 @@ export const deptListApi = (data = {}) => {
 };
 
 export const addUserApi = (data = {}) => {
-  console.log(data,'??');
   data.action = "add";
   return request.post("/users/operate", data, { mock: false });
 };
