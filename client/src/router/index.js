@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/Home";
 import Welcome from "@/views/Welcome";
 import User from "@/views/User";
+import Menu from "@/views/Menu";
 import Login from "@/views/Login";
 /**
  * @type {import('vue-router').RouteRecordRaw[]}
@@ -22,9 +23,15 @@ const routes = [
       },
       {
         name: "user",
-        path: "/user",
+        path: "/system/user",
         meta: { title: "用户管理" },
         component: User,
+      },
+      {
+        name: "menu",
+        path: "/system/menu",
+        meta: { title: "菜单管理" },
+        component: Menu,
       },
     ],
   },

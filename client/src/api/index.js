@@ -8,6 +8,10 @@ export const menuListApi = (data = {}) => {
   return request.get("/menu/list", data);
 };
 
+export const menuOperateApi = (data = {}) => {
+  return request.post("/menu/operate", data);
+};
+
 export const leaveCountApi = (data = {}) => {
   return request.get("/leave/count", data);
 };
