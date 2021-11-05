@@ -319,17 +319,4 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.p-search-wrap{
-  padding: 30px 30px 15px;
-}
-.p-btn-wrap{
-  padding: 0 30px 30px 30px;
-}
-.p-table-wrap{
-   padding: 0 30px 30px 30px;
-}
-.p-pagination{
-  text-align: right;
-  padding: 0 30px 30px 30px;
-}
 </style>

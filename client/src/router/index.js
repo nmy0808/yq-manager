@@ -4,6 +4,7 @@ import Welcome from "@/views/Welcome";
 import User from "@/views/User";
 import Menu from "@/views/Menu";
 import Role from "@/views/Role";
+import Dept from "@/views/Dept";
 import Login from "@/views/Login";
 /**
  * @type {import('vue-router').RouteRecordRaw[]}
@@ -39,6 +40,12 @@ const routes = [
         path: "/system/role",
         meta: { title: "角色管理" },
         component: Role,
+      },
+      {
+        name: "dept",
+        path: "/system/dept",
+        meta: { title: "部门管理" },
+        component: Dept,
       },
     ],
   },
