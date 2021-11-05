@@ -35,7 +35,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import CMenu from "../components/menu/c-menu.vue";
-import { menuListApi, leaveCountApi } from "../api";
+import { menuListApi, leaveCountApi, menuPermissionApi } from "../api";
 import CBreadCrumbs from "../components/bread-crumbs/c-bread-crumbs.vue";
 import CUserDropdown from "../components/dropdown/c-user-dropdown.vue";
 export default defineComponent({
@@ -53,8 +53,9 @@ export default defineComponent({
   async mounted() {
     const leaveCount = await leaveCountApi();
     this.leaveCount = leaveCount;
-    const menus = await menuListApi();
-    this.menus = menus;
+    // const menus = await menuListApi();
+    const menus = await menuPermissionApi()
+    this.menus = menus.menuList;
   },
   methods: {
     toggleMenu() {

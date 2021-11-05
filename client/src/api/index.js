@@ -8,6 +8,11 @@ export const menuListApi = (data = {}) => {
   return request.get("/menu/list", data, { mock: false });
 };
 
+// 获取当前角色的权限
+export const menuPermissionApi = (data = {}) => {
+  return request.get("/users/getPermissionList", data, { mock: false });
+};
+
 export const menuOperateApi = (data = {}) => {
   return request.post("/menu/operate", data, { mock: false });
 };
