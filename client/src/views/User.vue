@@ -1,7 +1,7 @@
 <template>
   <div class="user-page">
-    <div class="user-from-wrap radius-hide">
-      <el-form inline :model="userFrom" ref="formRef">
+    <div class="user-from-wrap radius-hide"  v-has="'user-query'">
+      <el-form inline :model="userFrom" ref="formRef" >
         <el-form-item label="用户ID" prop="userId">
           <el-input v-model="userFrom.userId" />
         </el-form-item>
@@ -23,8 +23,8 @@
       </el-form>
     </div>
     <div>
-      <el-button type="primary" @click="onAddUserBtn">新增</el-button>
-      <el-button type="danger" @click="onDeleteUserSelects">批量删除</el-button>
+      <el-button type="primary"  v-has="'user-create'" @click="onAddUserBtn">新增</el-button>
+      <el-button type="danger" v-has="'user-delete'" @click="onDeleteUserSelects">批量删除</el-button>
       <el-table
         @selection-change="onChangeUserSelects"
         class="base-table"

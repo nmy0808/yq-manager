@@ -37,7 +37,7 @@
 <script>
 import { defineComponent, reactive, ref } from "vue";
 import useVuexWithRouter from "@/hooks/useVuexWithRouter";
-import { loginApi } from "@/api";
+import { loginApi, menuPermissionApi } from "@/api";
 export default defineComponent({
   name: "Login",
   components: {},
@@ -72,11 +72,17 @@ export default defineComponent({
         if (valid) {
           const loginInfo = await loginApi(userForm);
           store.commit("setUserInfo", loginInfo);
+          await getMenuPermission();
           toPageHome();
         } else {
           return false;
         }
       });
+    };
+    const getMenuPermission = async () => {
+      const { menuList, actionList } = await menuPermissionApi();
+      store.commit("setActionList", actionList);
+      store.commit("setMenuList", menuList);
     };
     return {
       toPageHome,

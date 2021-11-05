@@ -17,7 +17,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="p-btn-wrap">
+    <div class="p-btn-wrap"  v-has="'role-create'">
       <el-button type="primary" @click="onShowRoleOperate('add')"
         >新增角色</el-button
       >
@@ -35,14 +35,15 @@
         <el-table-column>
           <template #default="scope">
             <el-button
+              v-has="'role-edit'"
               type="primary"
               @click="onShowRoleOperate('edit', scope.row)"
               >编辑</el-button
             >
-            <el-button type="success" @click="onOpenRolePermission(scope.row)"
+            <el-button v-has="'role-setting'" type="success" @click="onOpenRolePermission(scope.row)"
               >设置权限</el-button
             >
-            <el-button type="danger" @click="onDeleteRole(scope.row)"
+            <el-button v-has="'role-delete'" type="danger" @click="onDeleteRole(scope.row)"
               >删除</el-button
             >
           </template>

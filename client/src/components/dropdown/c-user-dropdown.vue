@@ -27,9 +27,10 @@ export default {
   },
   methods: {
     onLoginOut(command) {
-      console.log(command);
       if (command === "out") {
         this.$store.commit("setUserInfo", "");
+        this.$store.commit('setActionList',[])
+        this.$store.commit('setMenuList',[])
         this.$router.push({ name: "login" });
       }
     },

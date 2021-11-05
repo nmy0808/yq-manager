@@ -21,7 +21,7 @@
           >
         </el-form-item>
       </el-form>
-      <el-button type="primary" @click="onOpenMenuDialog(1)">创建</el-button>
+      <el-button type="primary" v-has="'menu-create'" @click="onOpenMenuDialog(1)">创建</el-button>
       <el-table
         class="base-table"
         :data="menuList"
@@ -39,15 +39,16 @@
         <el-table-column fixed="right" label="Operations" width="220">
           <template #default="scope">
             <el-button
+            v-has="'menu-create'"
               type="text"
               size="small"
               @click="onOpenMenuDialog(2, scope.row)"
               >新增</el-button
             >
-            <el-button type="text" size="small" @click="onEmitMenu(scope.row)"
+            <el-button v-has="'menu-edit'" type="text" size="small" @click="onEmitMenu(scope.row)"
               >编辑</el-button
             >
-            <el-button type="text" size="small" @click="onDeleteMenu(scope.row)"
+            <el-button v-has="'menu-delete'" type="text" size="small" @click="onDeleteMenu(scope.row)"
               >删除</el-button
             >
           </template>

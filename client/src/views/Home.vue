@@ -35,7 +35,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import CMenu from "../components/menu/c-menu.vue";
-import { menuListApi, leaveCountApi, menuPermissionApi } from "../api";
+import { menuListApi, leaveCountApi } from "../api";
 import CBreadCrumbs from "../components/bread-crumbs/c-bread-crumbs.vue";
 import CUserDropdown from "../components/dropdown/c-user-dropdown.vue";
 export default defineComponent({
@@ -43,7 +43,7 @@ export default defineComponent({
   components: { CMenu, CBreadCrumbs, CUserDropdown },
   data() {
     return {
-      menus: [],
+      menus: this.$store.state.menuList || [],
       wrapClass: "",
       menuIconClass: " el-icon-s-fold",
       userInfo: this.$store.state.userInfo || {},
@@ -54,8 +54,9 @@ export default defineComponent({
     const leaveCount = await leaveCountApi();
     this.leaveCount = leaveCount;
     // const menus = await menuListApi();
-    const menus = await menuPermissionApi()
-    this.menus = menus.menuList;
+    // const menus = await menuPermissionApi()
+    // this.menus = menus.menuList;
+    // this.getMenuPermission()
   },
   methods: {
     toggleMenu() {

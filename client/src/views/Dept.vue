@@ -18,15 +18,15 @@
       </el-form>
     </div>
     <div class="p-btn-wrap">
-      <el-button type="primary" @click="onOpenDialog">新增部门</el-button>
+      <el-button type="primary" v-has="'dept-create'" @click="onOpenDialog">新增部门</el-button>
     </div>
     <div class="p-table-wrap">
       <el-table :data="deptList" stripe style="width: 100%" row-key="_id">
         <el-table-column v-for="col in columns" :key="col.prop" v-bind="col" />
         <el-table-column>
           <template #default="scope">
-            <el-button type="primary" @click="onEdit(scope.row)">编辑</el-button>
-            <el-button type="danger" @click="onDelete(scope.row)">删除</el-button>
+            <el-button type="primary" v-has="'dept-edit'" @click="onEdit(scope.row)">编辑</el-button>
+            <el-button type="danger" v-has="'dept-delete'" @click="onDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
