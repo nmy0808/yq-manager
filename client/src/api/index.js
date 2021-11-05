@@ -25,19 +25,19 @@ export const deleteUserApi = (data = {}) => {
 };
 // 获取角色名称列表
 export const rolesAllListApi = (data = {}) => {
-  return request.get("/roles/allList", data);
+  return request.get("/roles/allList", data, { mock: false });
 };
 // 获取角色列表
 export const roleListApi = (data = {}) => {
-  return request.get("/roles/list", data);
+  return request.get("/roles/list", data, { mock: false });
 };
 
 export const roleOperateApi = (data = {}) => {
-  return request.post("/roles/operate", data);
+  return request.post("/roles/operate", data, { mock: false });
 };
 
 export const rolePermissionApi = (data = {}) => {
-  return request.post("/update/permission", data);
+  return request.post("/roles/update/permission", data, { mock: false });
 };
 
 export const deptListApi = (data = {}) => {

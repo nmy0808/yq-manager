@@ -10,7 +10,7 @@
           />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">查询</el-button>
+          <el-button type="primary" @click="getRoleList">查询</el-button>
           <el-button type="danger" @click="resetFields('searchFromRef')"
             >重置</el-button
           >
@@ -132,6 +132,7 @@ import {
   menuListApi,
   rolePermissionApi,
 } from "../api";
+import utils from '../util/utils'
 export default {
   name: "Role",
   setup() {
@@ -168,20 +169,23 @@ export default {
         width: "",
         formatter(_1,_2,value){
           const names = []
-          const halfKeys = value.halfCheckedKeys|| []
+          const halfKeys = value.checkedKeys|| []
           halfKeys.map(half=>{
             const name = menuMap.value[half]
             if(name){
               names.push(name)
             }
           })
-          return names.join(',')
+          return names.join(', ')
         }
       },
       {
         prop: "createTime",
         label: "创建时间",
         width: "",
+        formatter(_1,_2,value){
+            return utils.formateDate(new Date(value))
+        }
       },
     ];
     const action = ref("add");
@@ -282,8 +286,7 @@ export default {
       const checkedKeys = tree.getCheckedKeys();
       const params = {};
       params._id = currentRole.value._id;
-      params.halfCheckedKeys = halfCheckedKeys;
-      params.checkedKeys = checkedKeys;
+      params.permissionList = {halfCheckedKeys,checkedKeys}
       await rolePermissionApi(params);
       getRoleList();
       showPermission.value = false;
@@ -302,6 +305,7 @@ export default {
       showAddDialog,
       showPermission,
       currentRole,
+      getRoleList,
       onShowRoleOperate,
       onRoleOperate,
       onOpenRoleOperate,
@@ -315,4 +319,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.p-search-wrap{
+  padding: 30px 30px 15px;
+}
+.p-btn-wrap{
+  padding: 0 30px 30px 30px;
+}
+.p-table-wrap{
+   padding: 0 30px 30px 30px;
+}
+.p-pagination{
+  text-align: right;
+  padding: 0 30px 30px 30px;
+}
 </style>
