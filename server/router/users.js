@@ -26,7 +26,6 @@ router.post("/login", async (ctx) => {
     ctx.body = fail("请检查用户名或密码");
   }
 });
-
 router.post("/delete", async (ctx) => {
   const { userIds } = ctx.request.body;
   try {
@@ -43,7 +42,15 @@ router.post("/delete", async (ctx) => {
     ctx.body = fail({}, "修改失败");
   }
 });
-
+// 获取全量用户列表
+router.get('/all/list', async (ctx) => {
+  try {
+    const list = await user.find({}, "userId userName userEmail")
+    ctx.body = success(list)
+  } catch (error) {
+    ctx.body = fail(error.stack)
+  }
+})
 router.get("/list", async (ctx) => {
   const { userId, userName, state } = ctx.request.query;
   const { page, skipIndex } = pager(ctx.request.query);

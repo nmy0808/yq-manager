@@ -3,6 +3,7 @@ const userRouter = require("./users");
 const leaveRouter = require("./leave");
 const menuRouter = require("./menu");
 const roleRouter = require("./role");
+const deptRouter = require("./depts");
 const jwt = require("koa-jwt");
 const { jwtSecret } = require("../config/index");
 const router = new Router({
@@ -13,6 +14,7 @@ router.use(userRouter.routes());
 router.use(leaveRouter.routes());
 router.use(menuRouter.routes());
 router.use(roleRouter.routes());
+router.use(deptRouter.routes());
 
 //
 module.exports = (app) => {

@@ -31,15 +31,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <div class="p-pagination">
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :total="pager.total"
-        @current-change="onChangePage"
-      />
-    </div>
-    <el-dialog v-model="showDialog" title="部门操作">
+    <el-dialog v-model="showDialog" title="部门操作" @close="resetFields('deptFormRef')">
       <el-form
         :model="deptForm"
         ref="deptFormRef"
@@ -49,7 +41,7 @@
         <el-form-item prop="parentId" label="上级部门">
           <el-cascader
             v-model="deptForm.parentId"
-            :options="deptOptions"
+            :options="deptList"
             :props="{ checkStrictly: true, label: 'deptName', value: '_id' }"
             clearable
           />
@@ -93,7 +85,7 @@
 </template>
 
 <script>
-import { getCurrentInstance, ref, onMounted } from "vue";
+import { getCurrentInstance, ref, onMounted, nextTick } from "vue";
 import { deptListApi, deptOperateApi, userAllListApi } from "../api";
 import utils from '../util/utils'
 export default {
@@ -101,7 +93,7 @@ export default {
     // data
     const action = ref("add");
     const searchForm = ref({});
-    const deptForm = ref({});
+    const deptForm = ref({parentId: [null]});
     const columns = [
       { prop: "deptName", label: "部门名称" },
       { prop: "userName", label: "负责人" },
@@ -122,9 +114,7 @@ export default {
       userName: { required: true, message: "必须选择负责人", trigger: "blur" },
     };
     const deptList = ref([]); // 部门列表
-    const deptOptions = ref([]); //上级部门选项列表
     const userAllList = ref({}); //负责人列表
-    const pager = ref({ pageNum: 1, pageSize: 10, total: 0 });
     const showDialog = ref(false);
     const { proxy } = getCurrentInstance();
     // method
@@ -164,24 +154,20 @@ export default {
     };
     const onEdit = async(row)=>{
       action.value = 'edit'
-      Object.assign(deptForm.value, row)
       showDialog.value = true
+      nextTick(()=>{
+        Object.assign(deptForm.value, row)
+      })
     }
-    const onChangePage = (pageNum) => {};
     // api
     const onQueryDept = () => {
       getDeptList()
     };
     const getDeptList = async () => {
       const params = {};
-      Object.assign(params, pager.value);
       Object.assign(params, searchForm.value);
       const list = await deptListApi(params);
       deptList.value = list;
-    };
-    const getDeptOptions = async () => {
-      const list = await deptListApi();
-      deptOptions.value = list;
     };
     const getUserList = async () => {
       const list = await userAllListApi();
@@ -190,7 +176,6 @@ export default {
     //
     onMounted(() => {
       getDeptList();
-      getDeptOptions();
       getUserList();
     });
     return {
@@ -199,14 +184,11 @@ export default {
       columns,
       rules,
       deptList,
-      deptOptions,
       userAllList,
-      pager,
       showDialog,
       resetFields,
       onOpenDialog,
       onQueryDept,
-      onChangePage,
       onCloseDialog,
       onUserSelectChange,
       onSubmit,

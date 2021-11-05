@@ -22,7 +22,7 @@ export const userListApi = (data = {}) => {
 
 // 获取负责人
 export const userAllListApi = (data = {}) => {
-  return request.get("/users/all/list", data);
+  return request.get("/users/all/list", data, { mock: false });
 };
 
 // 删除单个或多个 `userIds:[userId,userId...]`
@@ -47,10 +47,10 @@ export const rolePermissionApi = (data = {}) => {
 };
 
 export const deptListApi = (data = {}) => {
-  return request.get("/dept/list", data);
+  return request.get("/dept/list", data, { mock: false });
 };
 export const deptOperateApi = (data = {}) => {
-  return request.post("/dept/operate", data);
+  return request.post("/dept/operate", data, { mock: false });
 };
 export const addUserApi = (data = {}) => {
   data.action = "add";
