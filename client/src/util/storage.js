@@ -9,7 +9,7 @@ export default {
   },
   getItem(key) {
     const storage = getStorage();
-    return storage[key];
+    return storage[key] || {};
   },
   clearItem(key) {
     const storage = getStorage();

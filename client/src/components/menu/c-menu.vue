@@ -1,12 +1,13 @@
 <template>
   <el-menu
-    default-active="1"
+  :default-active="activePath"
     class="menu-wrap"
     :collapse="isCollapse"
     background-color="#071321"
     text-color="#ffffff"
     active-text-color="#409eff"
     router
+    ref="menuRef"
   >
     <div class="menu-logo" :class="[calcLogoClass ? 'fold' : '']">
       <div class="menu-logo-img"></div>
@@ -17,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted } from "vue";
 import CTreeMenu from "./c-tree-menu.vue";
 
 export default defineComponent({
@@ -34,7 +35,15 @@ export default defineComponent({
   data() {
     return {
       isCollapse: false,
+      activePath: ''
     };
+  },
+  mounted() {
+    this.activePath = this.$route.path
+    // try {
+    //   const path = "/" + this.$route.path.split("/").filter((item) => item)[0];
+    //   this.$refs.menuRef.open(path);
+    // } catch (error) {}
   },
   computed: {
     calcLogoClass() {

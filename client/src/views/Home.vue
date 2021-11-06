@@ -35,7 +35,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import CMenu from "../components/menu/c-menu.vue";
-import { menuListApi, leaveCountApi } from "../api";
+import { leaveCountApi } from "../api";
 import CBreadCrumbs from "../components/bread-crumbs/c-bread-crumbs.vue";
 import CUserDropdown from "../components/dropdown/c-user-dropdown.vue";
 export default defineComponent({

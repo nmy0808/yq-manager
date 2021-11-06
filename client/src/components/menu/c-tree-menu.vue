@@ -14,7 +14,7 @@
       </template>
       <c-tree-menu :menus="menu.children"></c-tree-menu>
     </el-sub-menu>
-    <el-menu-item v-else-if="menu.menuType !== '2'" :index="menu.path">{{
+    <el-menu-item v-else-if="menu.menuType !== '2'" :index="menu.path" >{{
       menu.menuName
     }}</el-menu-item>
   </template>
