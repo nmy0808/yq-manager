@@ -120,6 +120,7 @@
      // 1:待审批 2:审批中 3:审批拒绝 4:审批通过 5:作废
      let doc = await Leave.findById(_id)
      let auditLogs = doc.auditLogs || [];
+     console.log(action, "?????????????");
      if (action == "refuse") {
        params.applyState = 3;
      } else {

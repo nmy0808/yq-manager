@@ -12,5 +12,8 @@ export default {
   setActionList(state,list){
     state.actionList = list
     storage.setItem("actionList", list);
+  },
+  setLeaveCount(state,count){
+    state.leaveCount = count
   }
 };

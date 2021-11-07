@@ -6,6 +6,7 @@ import Menu from "@/views/Menu";
 import Role from "@/views/Role";
 import Dept from "@/views/Dept";
 import Leave from "@/views/Leave";
+import Approve from "@/views/Approve";
 import Login from "@/views/Login";
 import { menuPermissionApi } from "../api";
 import storage from "../util/storage";
@@ -55,6 +56,12 @@ const routes = [
         path: "/audit/leave",
         meta: {title: "休假申请"},
         component: Leave
+      },
+      {
+        name: "check",
+        path: "/audit/check",
+        meta: {title: "待审批"},
+        component: Approve
       }
     ],
   },

@@ -17,7 +17,7 @@
           </c-bread-crumbs>
         </div>
         <div class="manager-user">
-          <el-badge :is-dot="leaveCount > 0" class="manager-user-badge">
+          <el-badge :is-dot="leaveCount > 0" class="manager-user-badge" @click="leaveCount!=0?$router.push({name:'check'}):''">
             <i class="el-icon-bell"></i>
           </el-badge>
           <c-user-dropdown :userInfo="userInfo"></c-user-dropdown>
@@ -46,13 +46,18 @@ export default defineComponent({
       menus: this.$store.state.menuList || [],
       wrapClass: "",
       menuIconClass: " el-icon-s-fold",
-      userInfo: this.$store.state.userInfo || {},
-      leaveCount:0,
+      userInfo: this.$store.state.userInfo || {}
     };
   },
+  computed:{
+    leaveCount(){
+      return this.$store.state.leaveCount
+    }
+  },
   async mounted() {
-    const leaveCount = await leaveCountApi();
-    this.leaveCount = leaveCount;
+    // const leaveCount = await leaveCountApi();
+    // this.leaveCount = leaveCount;
+    this.$store.dispatch('getLeaveCount')
     // const menus = await menuListApi();
     // const menus = await menuPermissionApi()
     // this.menus = menus.menuList;
