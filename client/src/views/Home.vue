@@ -17,7 +17,7 @@
           </c-bread-crumbs>
         </div>
         <div class="manager-user">
-          <el-badge :is-dot="leaveCount>0" class="manager-user-badge">
+          <el-badge :is-dot="leaveCount > 0" class="manager-user-badge">
             <i class="el-icon-bell"></i>
           </el-badge>
           <c-user-dropdown :userInfo="userInfo"></c-user-dropdown>
@@ -35,7 +35,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import CMenu from "../components/menu/c-menu.vue";
-import { leaveCountApi } from "../api";
+import { leaveCountApi, menuPermissionApi } from "../api";
 import CBreadCrumbs from "../components/bread-crumbs/c-bread-crumbs.vue";
 import CUserDropdown from "../components/dropdown/c-user-dropdown.vue";
 export default defineComponent({
@@ -56,7 +56,7 @@ export default defineComponent({
     // const menus = await menuListApi();
     // const menus = await menuPermissionApi()
     // this.menus = menus.menuList;
-    // this.getMenuPermission()
+    this.getMenuPermission()
   },
   methods: {
     toggleMenu() {
@@ -69,6 +69,11 @@ export default defineComponent({
         this.menuIconClass = "el-icon-s-fold";
       }
     },
+     async getMenuPermission   ()  {
+      const { menuList, actionList } = await menuPermissionApi();
+      this.$store.commit("setActionList", actionList);
+      this.$store.commit("setMenuList", menuList);
+    }
   },
 });
 </script>
@@ -108,7 +113,7 @@ export default defineComponent({
     background: $color-main;
     color: $color-light;
     transition: all 200ms;
-  overflow-y: auto;
+    overflow-y: auto;
   }
   .manager-right {
     min-width: 1300px;
@@ -121,7 +126,7 @@ export default defineComponent({
     right: 0;
     color: $color-dark;
     transition: all 200ms;
-  overflow-y: auto;
+    overflow-y: auto;
 
     .manager-top-nav {
       height: 50px;

@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, onMounted, reactive, ref } from "vue";
 import useVuexWithRouter from "@/hooks/useVuexWithRouter";
 import { loginApi, menuPermissionApi } from "@/api";
 export default defineComponent({

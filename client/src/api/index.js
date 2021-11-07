@@ -20,7 +20,12 @@ export const menuOperateApi = (data = {}) => {
 export const leaveCountApi = (data = {}) => {
   return request.get("/leave/count", data);
 };
-
+export const leaveListApi = (data={})=>{
+  return request.get("/leave/list", data);
+}
+export const leaveOperateApi = (data={})=>{
+  return request.post("/leave/operate", data);
+}
 export const userListApi = (data = {}) => {
   return request.get("/users/list", data, { mock: false });
 };
