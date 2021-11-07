@@ -90,11 +90,11 @@
         <el-form-item label="休假时长">
           {{ leaveForm.leaveDay }} 天
         </el-form-item>
-        <el-form-item label="休假原因" prop="reason">
+        <el-form-item label="休假原因" prop="reasons">
           <el-input
             type="textarea"
             rows="4"
-            v-model="leaveForm.reason"
+            v-model="leaveForm.reasons"
             placeholder="请输入休假原因"
           />
         </el-form-item>
@@ -174,7 +174,7 @@ export default {
     const leaveForm = reactive({
       startTime: "",
       endTime: "",
-      reason: "",
+      reasons: "",
       applyType: 1,
       leaveDay: 0, // 计算休假时长, 不需要传后端
     });
@@ -280,7 +280,7 @@ export default {
         message: "结束日期不能为空",
         trigger: ["blur", "change"],
       },
-      reason: { required: true, message: "休假原因不能为空", trigger: "blur" },
+      reasons: { required: true, message: "休假原因不能为空", trigger: "blur" },
       applyType: {
         required: true,
         message: "休假类型不能为空",
@@ -331,6 +331,7 @@ export default {
           const { userEmail, userId, userName } = storage.getItem("userInfo");
           const params = { ...toRaw(leaveForm), userEmail, userId, userName };
           params.action = action.value;
+          params.leaveTime =  (leaveForm.endTime-leaveForm.startTime)/(24*60*60*1000)+1 +'天'
           await leaveOperateApi(params);
           proxy.$message.success("已申请");
           getLeaveList();

@@ -21,10 +21,10 @@ export const leaveCountApi = (data = {}) => {
   return request.get("/leave/count", data);
 };
 export const leaveListApi = (data={})=>{
-  return request.get("/leave/list", data);
+  return request.get("/leave/list", data,  { mock: false });
 }
 export const leaveOperateApi = (data={})=>{
-  return request.post("/leave/operate", data);
+  return request.post("/leave/operate", data,  { mock: false });
 }
 export const userListApi = (data = {}) => {
   return request.get("/users/list", data, { mock: false });
